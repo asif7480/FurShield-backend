@@ -26,6 +26,10 @@ app.use(router)
 connectDB()
 app.use(errorHandler)
 
+app.get("/", (request,response) => {
+    return response.status(200).json({ message: "Server up and running."})
+})
+
 app.listen(port, () => {
     console.log(`Server is running at port: ${port}`);
 })
