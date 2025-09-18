@@ -1,49 +1,49 @@
-// import mongoose from 'mongoose';
+import mongoose from 'mongoose';
 
-// const connectDB = async() => {
-//     try{
-//         const conn = await mongoose.connect(process.env.MONGO_URI)
-//         console.log(`Connected to: ${conn.connection.host}`);
-//     }catch(err){
-//         console.log(`Error: ${err.message}`)
-//     }
+const connectDB = async() => {
+    try{
+        const conn = await mongoose.connect(process.env.MONGO_URI)
+        console.log(`Connected to: ${conn.connection.host}`);
+    }catch(err){
+        console.log(`Error: ${err.message}`)
+    }
+}
+
+export default connectDB
+
+// import mongoose from "mongoose";
+
+// const MONGO_URI = process.env.MONGO_URI;
+
+// if (!MONGO_URI) {
+//   throw new Error("Please define the MONGO_URI environment variable");
 // }
 
-// export default connectDB
+// // Cache the connection across function calls (important in serverless)
+// let cached = global.mongoose;
 
-import mongoose from "mongoose";
+// if (!cached) {
+//   cached = global.mongoose = { conn: null, promise: null };
+// }
 
-const MONGO_URI = process.env.MONGO_URI;
+// async function connectDB() {
+//   if (cached.conn) {
+//     return cached.conn; // Use existing connection if available
+//   }
 
-if (!MONGO_URI) {
-  throw new Error("Please define the MONGO_URI environment variable");
-}
+//   if (!cached.promise) {
+//     cached.promise = mongoose.connect(MONGO_URI, {
+//       useNewUrlParser: true,
+//       useUnifiedTopology: true,
+//       bufferCommands: false,  // Disable mongoose buffering — helpful for error visibility
+//     }).then((mongoose) => {
+//       console.log(`Connected to MongoDB: ${mongoose.connection.host}`);
+//       return mongoose;
+//     });
+//   }
 
-// Cache the connection across function calls (important in serverless)
-let cached = global.mongoose;
+//   cached.conn = await cached.promise;
+//   return cached.conn;
+// }
 
-if (!cached) {
-  cached = global.mongoose = { conn: null, promise: null };
-}
-
-async function connectDB() {
-  if (cached.conn) {
-    return cached.conn; // Use existing connection if available
-  }
-
-  if (!cached.promise) {
-    cached.promise = mongoose.connect(MONGO_URI, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-      bufferCommands: false,  // Disable mongoose buffering — helpful for error visibility
-    }).then((mongoose) => {
-      console.log(`Connected to MongoDB: ${mongoose.connection.host}`);
-      return mongoose;
-    });
-  }
-
-  cached.conn = await cached.promise;
-  return cached.conn;
-}
-
-export default connectDB;
+// export default connectDB;
