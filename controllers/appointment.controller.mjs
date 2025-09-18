@@ -1,6 +1,6 @@
-import asyncHandler from 'express-async-handler';
+import asyncHandler from "express-async-handler";
 
-import Appointment from '../models/appointment.model.mjs';
+import Appointment from "../models/appointment.model.mjs";
 
 /**
  * @route   POST /api/v1/appointments
@@ -11,7 +11,9 @@ export const createAppointment = asyncHandler(async (req, res) => {
   const { pet, vet, date } = req.body;
 
   if (!pet || !vet || !date) {
-    return res.status(400).json({ message: "Pet, Vet and Date are required", success: false });
+    return res
+      .status(400)
+      .json({ message: "Pet, Vet and Date are required", success: false });
   }
 
   const appointmentDate = new Date(date);
@@ -40,7 +42,6 @@ export const createAppointment = asyncHandler(async (req, res) => {
     data: appointment,
   });
 });
-
 
 /**
  * @route   GET /api/v1/appointments/owner
@@ -78,11 +79,18 @@ export const getVetAppointments = asyncHandler(async (req, res) => {
   });
 });
 
-export const getAllAppointments = asyncHandler( async(req, res) => {
+export const getAllAppointments = asyncHandler(async (req, res) => {
   const appointments = await Appointment.find()
+    .populate("pet")
+    .populate("owner")
+    .populate("vet");
 
-  return res.status(200).json(appointments);
-})
+  return res.status(200).json({
+    message: "All appointments retrieved successfully",
+    success: true,
+    data: appointments,
+  });
+});
 
 /**
  * @route   PUT /api/v1/appointments/:id
@@ -92,16 +100,22 @@ export const getAllAppointments = asyncHandler( async(req, res) => {
 export const updateAppointment = asyncHandler(async (req, res) => {
   const updates = req.body;
 
-  const appointment = await Appointment.findByIdAndUpdate(req.params.id, updates, {
-    new: true,
-    runValidators: true,
-  })
+  const appointment = await Appointment.findByIdAndUpdate(
+    req.params.id,
+    updates,
+    {
+      new: true,
+      runValidators: true,
+    }
+  )
     .populate("pet")
     .populate("owner", "name email")
     .populate("vet", "name email specialization");
 
   if (!appointment) {
-    return res.status(404).json({ message: "Appointment not found", success: false });
+    return res
+      .status(404)
+      .json({ message: "Appointment not found", success: false });
   }
 
   return res.status(200).json({
@@ -123,7 +137,9 @@ export const deleteAppointment = asyncHandler(async (req, res) => {
   });
 
   if (!appointment) {
-    return res.status(404).json({ message: "Appointment not found or not yours", success: false });
+    return res
+      .status(404)
+      .json({ message: "Appointment not found or not yours", success: false });
   }
 
   return res.status(200).json({

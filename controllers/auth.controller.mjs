@@ -28,10 +28,10 @@ export const register = asyncHandler(async (req, res) => {
   } = req.body;
 
   // Determine actual name to use (shelterName for shelters)
-  const actualName = role === "shelter" ? shelterName : name;
+  // const actualName = role === "shelter" ? shelterName : name;
 
   // Validate common required fields
-  if (!actualName || !contactNumber || !email || !address || !password || !role) {
+  if (!name || !contactNumber || !email || !address || !password || !role) {
     return res.status(400).json({
       message: "All required fields must be filled.",
       success: false,
@@ -54,9 +54,9 @@ export const register = asyncHandler(async (req, res) => {
     });
   }
 
-  if (role === "shelter" && (!shelterName || !contactPerson)) {
+  if (role === "shelter" && (!contactPerson)) {
     return res.status(400).json({
-      message: "Shelter must provide shelter name and contact person.",
+      message: "Please provide shelter contact person.",
       success: false,
     });
   }
@@ -82,7 +82,7 @@ export const register = asyncHandler(async (req, res) => {
 
   // Prepare user data
   const userData = {
-    name: actualName,
+    name: name,
     contactNumber,
     email: email.toLowerCase(),
     address,
@@ -117,6 +117,7 @@ export const register = asyncHandler(async (req, res) => {
     },
   });
 });
+
 
 
 /**

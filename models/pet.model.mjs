@@ -8,7 +8,7 @@ const petSchema = new mongoose.Schema({
   age: Number,
   gender: String,
   medicalHistory: String,
-  images: String
+  image: String
 }, { timestamps: true });
 
 export default mongoose.model("Pet", petSchema);
