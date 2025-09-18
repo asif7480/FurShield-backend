@@ -38,6 +38,12 @@ app.use(cors({
 //     credentials: true
 // }))
 
+app.get("/", (request, response) => {
+    response.status(200).json({
+        message: "Health check route working fine."
+    })
+})
+
 app.use(router)
 
 connectDB()
