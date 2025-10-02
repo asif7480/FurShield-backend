@@ -25,6 +25,7 @@ const allowedOrigins = [
 
 app.use(cors({
   origin: function (origin, callback) {
+    console.log("Origin trying to access:", origin);
     if (!origin || allowedOrigins.includes(origin)) {
       callback(null, true);
     } else {
